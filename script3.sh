@@ -12,23 +12,27 @@ echo $MEMLOAD
 user=$(echo "$xml" | sed -n '/<user>/,/<\/user>/p')
 process=$(echo "$xml" | sed -n '/<process>/,/<\/process>/p')
 
-for who in $(who | cut -d' ' -f1 | sort | uniq);
-do
-	userBlock+=${user/<username>/<username>$who}
+
+while read -r var; do
+	userBlock+=${user/<username>/<username>$var}
 	while read -r var1 var2; do
 		processBlock="${process/<pid>/<pid>$var1}"
 		processBlock="${processBlock/<cmd>/<cmd>$var2}"
 		processes+="$processBlock\n"
-	done <<< "$(ps -u $who | awk '{print $1, $4}')"
-	printf "$processes" > processes.xml
-	userBlock=$(printf "$userBlock" | awk '/<\/username>/{p=1;print}/<\/user>/{p=0}!p')
-	userBlock=$(printf "$userBlock" | sed -e '/<\/username>/r processes.xml')
-done
+	done <<< "$(ps -u $var | awk '{print $1, $4}' | sed -e '1d')"
+	userBlock="${userBlock/????????<process>*<\/process>??/$processes}"
+
+	users+="$userBlock\n"
+done <<< "$(who -a | cut -d' ' -f1 | sort | uniq)"
+
+
+
+
 	printf "$userBlock" > users.xml
 
 xml=$(printf "$xml" | awk '/<\/memload>/{p=1;print}/<\/systemstats>/{p=0}!p')
 xml=$(printf "$xml" | sed -e '/<\/memload>/r users.xml')
-#printf "$xml"
+printf "$xml"
 DATE=$(date +%Y-%m-%d)
 WEEKDAY=$(date +%u)
 TIME=$(date +"%T")
