@@ -1,0 +1,1 @@
+<averagestats> <date>2017-06-24</date> <!-- dd.mm.yyyy --> <weekday>6</weekday> <!-- full weekday name --> <time>20:19:02</time> <!-- hh:mm:ss --> <cpuload>CPULOADS/5</cpuload> <!—- average CPU load from last 15min --> <memload>MEMLOADS/5</memload> <!—- average memory load from last 15minut --> </averagestats>
