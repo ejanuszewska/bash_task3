@@ -4,6 +4,9 @@
 clear
 cd /home/ewa/bash_task3/
 
+git checkout details
+git pull origin details
+
 xml=$(cat systemstats.xml)
 
 CPULOAD=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1"%"}')
@@ -39,9 +42,9 @@ xml=${xml/<time>/<time>$TIME}
 xml=${xml/<cpuload>/<cpuload>$CPULOAD}
 xml=${xml/<memload>/<memload>$MEMLOAD}
 echo $xml > systemstats3.xml
-git checkout details
-git add .
+
+git add systemstats3.xml
 git commit -m "report2"
 git push origin details
-Contact GitHub API Training Shop Blog About
-© 2017 GitHub, Inc. Terms Privacy Security Status Help
+
+git checkout master
